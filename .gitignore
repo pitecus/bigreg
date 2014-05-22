@@ -1,0 +1,8 @@
+# Dist folder
+dist
+
+# Node modules.
+node_modules
+
+# Bower modules
+vendor

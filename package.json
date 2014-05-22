@@ -1,0 +1,29 @@
+{
+  "name": "bigreg",
+  "version": "0.0.1",
+  "description": "BI Aggregator visualization tool",
+  "main": "dist/server/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bi",
+    "aggregator",
+    "cassandra"
+  ],
+  "author": "Leonardo Meirelles <Leonardo.Meirelles@nytimes.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.6.2",
+    "gulp-clean": "^0.2.4",
+    "gulp-coffee": "^1.4.3",
+    "gulp-watch": "^0.6.5",
+    "gulp-nodemon": "^1.0.3",
+    "gulp-less": "^1.2.3",
+    "gulp-rename": "^1.2.0"
+  },
+  "dependencies": {
+    "express": "^4.3.0",
+    "morgan": "^1.1.1"
+  }
+}

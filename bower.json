@@ -1,0 +1,27 @@
+{
+  "name": "bigreg",
+  "version": "0.0.1",
+  "authors": [
+    "Leonardo Meirelles <Leonardo.Meirelles@nytimes.com>"
+  ],
+  "description": "Show aggregation values at random",
+  "main": "dist/server/app.js",
+  "moduleType": [
+    "amd",
+    "node"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "dist",
+    "vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.1.1",
+    "jquery": "2.1.1"
+  }
+}
