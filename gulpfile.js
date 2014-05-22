@@ -56,6 +56,8 @@ gulp.task('nodemon', ['build'], function() {
 gulp.task('copy', function() {
   gulp.src('vendor/jquery/dist/**').pipe(gulp.dest('dist/web/static/jquery-' + bower.dependencies.jquery + '/js'));
   gulp.src('vendor/bootstrap/dist/**').pipe(gulp.dest('dist/web/static/bootstrap-' + bower.dependencies.bootstrap));
+  gulp.src('vendor/d3/d3*.js').pipe(gulp.dest('dist/web/static/d3-' + bower.dependencies.d3 + '/js'));
+  gulp.src('src/data/**').pipe(gulp.dest('dist/web/data'));
   return gulp.src('src/web/index.html').pipe(gulp.dest('dist/web'));
 });
 

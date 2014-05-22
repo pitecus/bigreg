@@ -63,6 +63,14 @@ gulp.task 'copy', ->
 	gulp.src 'vendor/bootstrap/dist/**'
 		.pipe gulp.dest 'dist/web/static/bootstrap-' + bower.dependencies.bootstrap
 
+	# D3.
+	gulp.src 'vendor/d3/d3*.js'
+		.pipe gulp.dest 'dist/web/static/d3-' + bower.dependencies.d3 + '/js'
+
+	# Data.
+	gulp.src 'src/data/**'
+		.pipe gulp.dest 'dist/web/data'
+
 	# Home page.
 	gulp.src 'src/web/index.html'
 		.pipe gulp.dest 'dist/web'

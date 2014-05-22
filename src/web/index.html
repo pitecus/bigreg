@@ -59,9 +59,19 @@
         <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
         <p><a href="#" class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
       </div>
-
     </div><!-- /container -->
+
     <script src="static/jquery-2.1.1/js/jquery.min.js"></script>
     <script src="static/bootstrap-3.1.1/js/bootstrap.min.js"></script>
+    <script src="static/d3-3.4.8/js/d3.min.js"></script>
+    <script>
+// Load the data using JSON.
+$.getJSON('data/newport10k.json', function(json) {
+  console.log(json.length);
+});
+// Do I need to order it?
+// Plot using D3 bars where x is pace and y is the count of runners.
+    </script>
+
   </body>
 </html>
