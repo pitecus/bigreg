@@ -67,6 +67,14 @@ gulp.task 'copy', ->
 	gulp.src 'vendor/d3/d3*.js'
 		.pipe gulp.dest 'dist/web/static/d3-' + bower.dependencies.d3 + '/js'
 
+	# Underscore.
+	gulp.src 'vendor/underscore/*.js'
+		.pipe gulp.dest 'dist/web/static/underscore-' + bower.dependencies.underscore + '/js'
+
+	# Moment.js
+	gulp.src ['vendor/momentjs/*.js', 'vendor/momentjs/min/*.js']
+		.pipe gulp.dest 'dist/web/static/momentjs-' + bower.dependencies.momentjs + '/js'
+
 	# Data.
 	gulp.src 'src/data/**'
 		.pipe gulp.dest 'dist/web/data'
