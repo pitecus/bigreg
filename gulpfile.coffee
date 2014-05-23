@@ -49,9 +49,7 @@ gulp.task 'nodemon', ['build'], ->
 	nodemon
 		script: 'dist/server/app.js'
 		ext: 'js'
-		watch: ['dist/']
-	.on 'restart', ->
-		console.log 'server restart'
+		watch: ['dist/server/']
 
 # Copy files.
 gulp.task 'copy', ->
