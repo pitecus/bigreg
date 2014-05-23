@@ -33,9 +33,20 @@ gulp.task 'clean', ->
 
 # CoffeeScript.
 gulp.task 'coffee', ->
-	gulp.src 'src/**/*.coffee'
+	gulp.start 'coffee-server', 'coffee-web'
+
+# CoffeeScript server.
+gulp.task 'coffee-server', ->
+	gulp.src 'src/server/**/*.coffee'
 		.pipe coffee(bare: true).on 'error', gutil.log
-		.pipe gulp.dest 'dist'
+		.pipe gulp.dest 'dist/server'
+
+
+# CoffeeScript web.
+gulp.task 'coffee-web', ->
+	gulp.src 'src/web/**/*.coffee'
+		.pipe coffee(bare: true).on 'error', gutil.log
+		.pipe gulp.dest 'dist/web'
 
 # Less.
 gulp.task 'less', ->
@@ -84,7 +95,8 @@ gulp.task 'copy', ->
 # Watch for changes
 gulp.task 'watch', ['build'], ->
 	# Watch for CoffeeScript files.
-	gulp.watch 'src/**/*', ['coffee']
+	gulp.watch 'src/server/*', ['coffee-server']
+	gulp.watch 'src/web/*', ['coffee-web']
 
 	# Watch for static files.
 	gulp.watch ['vendor/**', 'src/web/**'], ['copy']
