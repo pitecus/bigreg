@@ -6,3 +6,6 @@ node_modules
 
 # Bower modules
 vendor
+
+# Generated files.
+gulpfile.js
