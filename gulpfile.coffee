@@ -98,8 +98,11 @@ gulp.task 'watch', ['build'], ->
 	gulp.watch 'src/server/*', ['coffee-server']
 	gulp.watch 'src/web/*', ['coffee-web']
 
+	# Watch for less changes.
+	gulp.watch 'src/less/*', ['less']
+
 	# Watch for static files.
-	gulp.watch ['vendor/**', 'src/web/**'], ['copy']
+	gulp.watch ['vendor/**', 'src/web/**', 'src/data/**'], ['copy']
 
 # Build task.
 gulp.task 'build', ->
