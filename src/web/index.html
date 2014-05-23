@@ -1,77 +1,225 @@
 
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<html lang='en'>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<meta name='description' content=''>
+		<meta name='author' content=''>
 
-    <title>BI aGgregator</title>
+		<title>BI aGgregator</title>
 
-    <!-- Stylesheet -->
-    <link href="static/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <link href="static/bootstrap-3.1.1/css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="static/bigreg-0.0.1/css/bigreg.min.css" rel="stylesheet">
-  </head>
+		<!-- Stylesheet -->
+		<link href='static/bootstrap-3.1.1/css/bootstrap.min.css' rel='stylesheet'>
+		<link href='static/bootstrap-3.1.1/css/bootstrap-theme.min.css' rel='stylesheet'>
+		<link href='static/bigreg-0.0.1/css/bigreg.min.css' rel='stylesheet'>
+	</head>
 
-  <body role="document">
+	<body role='document'>
 
-    <!-- Fixed navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Bootstrap theme</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </div>
+		<!-- Fixed navbar -->
+		<div class='navbar navbar-inverse navbar-fixed-top' role='navigation'>
+			<div class='container'>
+				<div class='navbar-header'>
+					<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+						<span class='sr-only'>Toggle navigation</span>
+						<span class='icon-bar'></span>
+						<span class='icon-bar'></span>
+						<span class='icon-bar'></span>
+					</button>
+					<a class='navbar-brand' href='#'>Bootstrap theme</a>
+				</div>
+				<div class='navbar-collapse collapse'>
+					<ul class='nav navbar-nav'>
+						<li class='active'><a href='#'>Home</a></li>
+						<li><a href='#about'>About</a></li>
+						<li><a href='#contact'>Contact</a></li>
+						<li class='dropdown'>
+							<a href='#' class='dropdown-toggle' data-toggle='dropdown'>Dropdown <b class='caret'></b></a>
+							<ul class='dropdown-menu'>
+								<li><a href='#'>Action</a></li>
+								<li><a href='#'>Another action</a></li>
+								<li><a href='#'>Something else here</a></li>
+								<li class='divider'></li>
+								<li class='dropdown-header'>Nav header</li>
+								<li><a href='#'>Separated link</a></li>
+								<li><a href='#'>One more separated link</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div><!--/.nav-collapse -->
+			</div>
+		</div>
 
-    <div class="container theme-showcase" role="main">
-      <!-- Main jumbotron for a primary marketing message or call to action -->
-      <div class="jumbotron">
-        <h1>Hello, world!</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-        <p><a href="#" class="btn btn-primary btn-lg" role="button">Learn more &raquo;</a></p>
-      </div>
-    </div><!-- /container -->
+		<div class='container' role='main'>
+			<svg width='700' height='400' style='border: 1px solid black'>
+			</svg>
+		</div><!-- /container -->
 
-    <script src="static/jquery-2.1.1/js/jquery.min.js"></script>
-    <script src="static/bootstrap-3.1.1/js/bootstrap.min.js"></script>
-    <script src="static/d3-3.4.8/js/d3.min.js"></script>
-    <script>
-// Load the data using JSON.
-$.getJSON('data/newport10k.json', function(json) {
-  console.log(json.length);
-});
-// Do I need to order it?
-// Plot using D3 bars where x is pace and y is the count of runners.
-    </script>
+		<script src='static/jquery-2.1.1/js/jquery.min.js'></script>
+		<script src='static/bootstrap-3.1.1/js/bootstrap.min.js'></script>
+		<script src='static/d3-3.4.8/js/d3.min.js'></script>
+		<script src='static/underscore-1.6.0/js/underscore.js'></script>
+		<script src='static/momentjs-2.6.0/js/moment.min.js'></script>
+		<script>
+(function () {
+	'use strict';
+	var
+		plot,
+		retrieveData;
 
-  </body>
+	// Plot the dataset.
+	plot = function (dataset, elementID, width, height) {
+		var
+			svg,
+			domain,
+			xScale,
+			yScale,
+			xAxis,
+			yAxis,
+			padding;
+
+		// Padding between bars.
+		padding = 3;
+
+		// Domain is the range of possible input data values.
+		domain = {
+			min: _.min(dataset, function (value, key, list) {
+				return value.count;
+			}),
+			max: _.max(dataset, function (value, key, list) {
+				return value.count;
+			})
+		};
+		
+		// Scale.
+		yScale = d3.scale.linear()
+			.domain([domain.min.count, domain.max.count])
+			.range([height, 20]);
+		xScale = d3.scale.linear()
+			.domain([0, dataset.length])
+			.range([0, width]);
+
+		// Ploting.
+		svg = d3.select(elementID)
+			.attr('width', width)
+			.attr('height', height);
+
+		// Plot the bars.
+		svg.selectAll('rect')
+			.data(dataset)
+			.enter()
+			.append('rect')
+			.attr('x', function (d, i) {
+				return i * (width / dataset.length);
+			})
+			.attr('y', function (d) {
+				return yScale(d.count);
+			})
+			.attr('width', width / dataset.length - padding)
+			.attr('height', function (d) {
+				return height - yScale(d.count);
+			})
+			.attr('fill', 'teal');
+
+		// Plot the labels.
+		svg.selectAll('text')
+			.data(dataset)
+			.enter()
+			.append('text')
+			.text(function (d) {
+				return d.value;
+			})
+			.attr('x', function (d, i) {
+				return i * (width / dataset.length) + (width / dataset.length - padding) / 2;
+			})
+			.attr('y', function (d) {
+				return yScale(d.count) - 5;
+			})
+			.attr('font-family', 'Menlo')
+   		.attr('font-size', '8px')
+   		.attr('fill', 'black')
+   		.attr('text-anchor', 'middle');
+
+   	// Setting up Axis.
+   	yAxis = d3.svg.axis()
+   		.scale(yScale)
+   		.orient('right')
+   		.ticks(5);
+   	svg.append('g')
+   		.attr('fill', 'none')
+   		.attr('stroke', '#000')
+   		.attr('shape-rendering', 'crispEdges')
+   		.attr('font-family', 'Menlo')
+   		.attr('font-size', '11px')
+   		.call(yAxis);
+	};
+
+	// Retrieve data using JSON.
+	retrieveData = function () {
+		// Load the data using JSON.
+		$.getJSON('data/newport10k.json', function(json) {
+			var
+				timePerGender,
+				groupByTimeAll;
+
+			// Extract only time and gender.
+			timePerGender = _.map(json, function (value, key, list) {
+				var
+					timestr,
+					time;
+
+				// Need to add an additional 0 to match millisseconds.
+				timestr = value.Time.replace(/ +/, '') + '0';
+
+				// Add hour if missing.
+				if (timestr.split(':').length === 2) {
+					timestr = '0:' + timestr;
+				}
+
+				// Parse the time.
+				time = moment.duration(timestr, 'HH:mm:ss.SS');
+
+				// Return the time.
+				return {
+					time: time,
+					gender: value.Gender
+				};
+			});
+
+			// Group by 2 minutes intervals.
+			groupByTimeAll = _.groupBy(timePerGender, function (value, key, list) {
+				return Math.floor(value.time.asMinutes() / 2) * 2;
+			});
+			groupByTimeAll = _.map(groupByTimeAll, function (value, key, list) {
+				var
+					duration,
+					durationStr;
+
+				// Calculate the time.
+				duration = moment.duration(parseInt(key), 'minutes');
+				durationStr = duration.hours() + ':';
+
+				// Add an additional 0 for beautifulness.
+				if (duration.minutes() == 0) {
+					durationStr += '0';
+				}
+				durationStr += duration.minutes();
+
+				return {
+					value: durationStr,
+					count: value.length
+				};
+			});
+
+			// Call plot.
+			plot(groupByTimeAll, 'svg', 700, 400);
+		});
+	};
+	retrieveData();
+}());
+
+		</script>
+	</body>
 </html>
