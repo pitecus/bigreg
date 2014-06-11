@@ -41,12 +41,11 @@ gulp.task 'coffee-server', ->
 		.pipe coffee(bare: true).on 'error', gutil.log
 		.pipe gulp.dest 'dist/server'
 
-
 # CoffeeScript web.
 gulp.task 'coffee-web', ->
 	gulp.src 'src/web/**/*.coffee'
 		.pipe coffee(bare: true).on 'error', gutil.log
-		.pipe gulp.dest 'dist/web'
+		.pipe gulp.dest 'dist/web/static/' + pkg.name + '-' + pkg.version + '/js'
 
 # Less.
 gulp.task 'less', ->
@@ -64,6 +63,10 @@ gulp.task 'nodemon', ['build'], ->
 
 # Copy files.
 gulp.task 'copy', ->
+	# Angular.
+	gulp.src ['vendor/angular/angular.js', 'vendor/angular/angular.min.js', 'vendor/angular/angular.min.js.map']
+		.pipe gulp.dest 'dist/web/static/angular-' + bower.dependencies.angular + '/js'
+
 	# jQuery.
 	gulp.src 'vendor/jquery/dist/**'
 		.pipe gulp.dest 'dist/web/static/jquery-' + bower.dependencies.jquery + '/js'
@@ -96,13 +99,14 @@ gulp.task 'copy', ->
 gulp.task 'watch', ['build'], ->
 	# Watch for CoffeeScript files.
 	gulp.watch 'src/server/*', ['coffee-server']
-	gulp.watch 'src/web/*', ['coffee-web']
+	gulp.watch 'src/web/**/*.coffee', ['coffee-web']
 
 	# Watch for less changes.
 	gulp.watch 'src/less/*', ['less']
 
 	# Watch for static files.
-	gulp.watch ['vendor/**', 'src/web/**', 'src/data/**'], ['copy']
+	gulp.watch ['vendor/*', 'src/web/index.html', 'src/data/*'], ['copy']
+
 
 # Build task.
 gulp.task 'build', ->

@@ -16,17 +16,26 @@
 		<link href='static/bigreg-0.0.1/css/bigreg.min.css' rel='stylesheet'>
 	</head>
 
-	<body role='document'>
-		<div class='container' role='main'>
+	<body role='document' ng-app>
+		<div class='container' role='main' ng-controller="BigCtrl">
+			<p>{{hello}}</p>
 			<svg style='border: 1px solid black'>
 			</svg>
+			<div class="row">
+				<div class="col-xs-6 col-md-3">
+					<svg id="d3-gender-pie" class="thumbnail" width="300" height="300"></svg>
+				</div>
+			</div>
 		</div><!-- /container -->
-
+		<!-- Libraries -->
+		<script src='static/angular-1.2.17/js/angular.min.js'></script>
+		<script src='static/d3-3.4.8/js/d3.min.js'></script>
 		<script src='static/jquery-2.1.1/js/jquery.min.js'></script>
 		<script src='static/bootstrap-3.1.1/js/bootstrap.min.js'></script>
-		<script src='static/d3-3.4.8/js/d3.min.js'></script>
 		<script src='static/underscore-1.6.0/js/underscore.js'></script>
 		<script src='static/momentjs-2.6.0/js/moment.min.js'></script>
+		<!-- App sources -->
+		<script src='static/bigreg-0.0.1/js/big.js'></script>
 		<script>
 (function () {
 	'use strict';
@@ -103,7 +112,7 @@
 				return yScale(d.count) - 5;
 			})
 			.attr('font-family', 'Menlo')
-   		.attr('font-size', '8px')
+   		.attr('font-size', '6px')
    		.attr('fill', 'black')
    		.attr('text-anchor', 'middle');
 
