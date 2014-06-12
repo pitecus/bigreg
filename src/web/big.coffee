@@ -10,14 +10,23 @@ BigCtrl = ($scope, $http) ->
 			# In order to plot the amount of male/female, reduce + map.
 			gender = _.countBy data, (runner) ->
 				return runner.Gender
-			plotPieChard gender, '#d3-gender-pie'
+			gender = [
+					label: 'Men'
+					value: gender.M
+				,
+					label: 'Women'
+					value: gender.F
+			]
+			plotPieChart 'Gender', gender, '#d3-gender-pie'
 
 	# Plot pie chart.
-	plotPieChard = (data, elementID) ->
+	plotPieChart = (title, data, elementID) ->
 		# DOM element.
-		svg = d3.select elementID
+		svg = d3
+			.select elementID
+			.data [data]
 		element = angular.element svg[0]
-		
+
 		# Retrieve the element size.
 		width = element.attr 'width'
 		height = element.attr 'height'
@@ -26,26 +35,58 @@ BigCtrl = ($scope, $http) ->
 		# Color.
 		color = d3.scale.category10()
 
-		# Pie.
-		pie = d3.layout.pie()
+		# Donut.
+		donut = d3.layout.pie()
+			.value (d) ->
+				return d.value
 			.sort null
 
 		# Arc.
 		arc = d3.svg.arc()
-			.outerRadius radius
+			.innerRadius radius - 100
+			.outerRadius radius - 20
 
-		# Add graph.
-		graph = svg
-			.attr 'width', width
-			.attr 'height', height
+		# Translate to center.
+		translate = 'translate(' + width / 2 + ',' + height / 2 + ')'
+
+		# Group 1: pie chart.
+		arc_group = svg
 			.append 'g'
-			.attr 'transform', 'translate(' + width / 2 + ',' + height / 2 + ')'
+			.attr 'transform', translate
 
 		# Path.
-		path = graph.selectAll 'path'
-			.data pie [data.M, data.F]
+		path = arc_group
+			.selectAll 'path'
+			.data donut data
 			.enter()
 			.append 'path'
 			.attr 'fill', (d, i) ->
 				color i
 			.attr 'd', arc
+
+		# Group 2: pie labels.
+		labels_group = svg
+			.append 'g'
+			.attr 'transform', translate
+
+		# Pie labels.
+		sliceLabel = labels_group
+			.selectAll 'text'
+			.data donut data
+		sliceLabel
+			.enter()
+			.append 'text'
+			.attr 'transform', (d, i) ->
+				return 'translate(' + arc.centroid(d) + ')'
+			.attr 'text-anchor', 'middle'
+			.text (d, i) ->
+				return d.data.label
+
+		# Group 3: pie title.
+		title_group = svg
+			.append 'g'
+			.attr 'transform', translate
+		title_group
+			.append 'text'
+			.attr 'text-anchor', 'middle'
+			.text title

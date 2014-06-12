@@ -1,199 +1,201 @@
 
 <!DOCTYPE html>
 <html lang='en'>
-	<head>
-		<meta charset='utf-8'>
-		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
-		<meta name='viewport' content='width=device-width, initial-scale=1'>
-		<meta name='description' content=''>
-		<meta name='author' content=''>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta name='description' content=''>
+    <meta name='author' content=''>
 
-		<title>BI aGgregator</title>
+    <title>BI aGgregator</title>
 
-		<!-- Stylesheet -->
-		<link href='static/bootstrap-3.1.1/css/bootstrap.min.css' rel='stylesheet'>
-		<link href='static/bootstrap-3.1.1/css/bootstrap-theme.min.css' rel='stylesheet'>
-		<link href='static/bigreg-0.0.1/css/bigreg.min.css' rel='stylesheet'>
-	</head>
+    <!-- Stylesheet -->
+    <link href='static/bootstrap-3.1.1/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='static/bootstrap-3.1.1/css/bootstrap-theme.min.css' rel='stylesheet'>
+    <link href='static/bigreg-0.0.1/css/bigreg.min.css' rel='stylesheet'>
+  </head>
 
-	<body role='document' ng-app>
-		<div class='container' role='main' ng-controller="BigCtrl">
-			<p>{{hello}}</p>
-			<svg style='border: 1px solid black'>
-			</svg>
-			<div class="row">
-				<div class="col-xs-6 col-md-3">
-					<svg id="d3-gender-pie" class="thumbnail" width="300" height="300"></svg>
-				</div>
-			</div>
-		</div><!-- /container -->
-		<!-- Libraries -->
-		<script src='static/angular-1.2.17/js/angular.min.js'></script>
-		<script src='static/d3-3.4.8/js/d3.min.js'></script>
-		<script src='static/jquery-2.1.1/js/jquery.min.js'></script>
-		<script src='static/bootstrap-3.1.1/js/bootstrap.min.js'></script>
-		<script src='static/underscore-1.6.0/js/underscore.js'></script>
-		<script src='static/momentjs-2.6.0/js/moment.min.js'></script>
-		<!-- App sources -->
-		<script src='static/bigreg-0.0.1/js/big.js'></script>
-		<script>
+  <body role='document' ng-app>
+    <div class='container' role='main' ng-controller="BigCtrl">
+      <p>{{hello}}</p>
+      <svg style='border: 1px solid black'>
+      </svg>
+      <div class="row">
+        <div class="col-md-6" id="d3-pace-race">
+        </div>
+        <div class="col-md-6" >
+          <svg class="thumbnail" width="300" height="300" id="d3-gender-pie"></svg>
+        </div>
+      </div>
+    </div><!-- /container -->
+    <!-- Libraries -->
+    <script src='static/angular-1.2.17/js/angular.min.js'></script>
+    <script src='static/d3-3.4.8/js/d3.min.js'></script>
+    <script src='static/jquery-2.1.1/js/jquery.min.js'></script>
+    <script src='static/bootstrap-3.1.1/js/bootstrap.min.js'></script>
+    <script src='static/underscore-1.6.0/js/underscore.js'></script>
+    <script src='static/momentjs-2.6.0/js/moment.min.js'></script>
+    <!-- App sources -->
+    <script src='static/bigreg-0.0.1/js/big.js'></script>
+    <script>
 (function () {
-	'use strict';
-	var
-		plot,
-		retrieveData;
+  'use strict';
+  var
+    plot,
+    retrieveData;
 
-	// Plot the dataset.
-	plot = function (dataset, elementID, width, height) {
-		var
-			svg,
-			domain,
-			xScale,
-			yScale,
-			xAxis,
-			yAxis,
-			padding;
+  // Plot the dataset.
+  plot = function (dataset, elementID, width, height) {
+    var
+      svg,
+      domain,
+      xScale,
+      yScale,
+      xAxis,
+      yAxis,
+      padding;
 
-		// Padding between bars.
-		padding = 3;
+    // Padding between bars.
+    padding = 3;
 
-		// Domain is the range of possible input data values.
-		domain = {
-			min: _.min(dataset, function (value, key, list) {
-				return value.count;
-			}),
-			max: _.max(dataset, function (value, key, list) {
-				return value.count;
-			})
-		};
-		
-		// Scale.
-		yScale = d3.scale.linear()
-			.domain([domain.min.count, domain.max.count])
-			.range([height, 20]);
-		xScale = d3.scale.linear()
-			.domain([0, dataset.length])
-			.range([0, width]);
+    // Domain is the range of possible input data values.
+    domain = {
+      min: _.min(dataset, function (value, key, list) {
+        return value.count;
+      }),
+      max: _.max(dataset, function (value, key, list) {
+        return value.count;
+      })
+    };
+    
+    // Scale.
+    yScale = d3.scale.linear()
+      .domain([domain.min.count, domain.max.count])
+      .range([height, 20]);
+    xScale = d3.scale.linear()
+      .domain([0, dataset.length])
+      .range([0, width]);
 
-		// Ploting.
-		svg = d3.select(elementID)
-			.attr('width', width)
-			.attr('height', height);
+    // Ploting.
+    svg = d3.select(elementID)
+      .attr('width', width)
+      .attr('height', height);
 
-		// Plot the bars.
-		svg.selectAll('rect')
-			.data(dataset)
-			.enter()
-			.append('rect')
-			.attr('x', function (d, i) {
-				return i * (width / dataset.length);
-			})
-			.attr('y', function (d) {
-				return yScale(d.count);
-			})
-			.attr('width', width / dataset.length - padding)
-			.attr('height', function (d) {
-				return height - yScale(d.count);
-			})
-			.attr('fill', 'teal');
+    // Plot the bars.
+    svg.selectAll('rect')
+      .data(dataset)
+      .enter()
+      .append('rect')
+      .attr('x', function (d, i) {
+        return i * (width / dataset.length);
+      })
+      .attr('y', function (d) {
+        return yScale(d.count);
+      })
+      .attr('width', width / dataset.length - padding)
+      .attr('height', function (d) {
+        return height - yScale(d.count);
+      })
+      .attr('fill', 'teal');
 
-		// Plot the labels.
-		svg.selectAll('text')
-			.data(dataset)
-			.enter()
-			.append('text')
-			.text(function (d) {
-				return d.value;
-			})
-			.attr('x', function (d, i) {
-				return i * (width / dataset.length) + (width / dataset.length - padding) / 2;
-			})
-			.attr('y', function (d) {
-				return yScale(d.count) - 5;
-			})
-			.attr('font-family', 'Menlo')
-   		.attr('font-size', '6px')
-   		.attr('fill', 'black')
-   		.attr('text-anchor', 'middle');
+    // Plot the labels.
+    svg.selectAll('text')
+      .data(dataset)
+      .enter()
+      .append('text')
+      .text(function (d) {
+        return d.value;
+      })
+      .attr('x', function (d, i) {
+        return i * (width / dataset.length) + (width / dataset.length - padding) / 2;
+      })
+      .attr('y', function (d) {
+        return yScale(d.count) - 5;
+      })
+      .attr('font-family', 'Menlo')
+      .attr('font-size', '6px')
+      .attr('fill', 'black')
+      .attr('text-anchor', 'middle');
 
-   	// Setting up Axis.
-   	yAxis = d3.svg.axis()
-   		.scale(yScale)
-   		.orient('right')
-   		.ticks(5);
-   	svg.append('g')
-   		.attr('fill', 'none')
-   		.attr('stroke', '#000')
-   		.attr('shape-rendering', 'crispEdges')
-   		.attr('font-family', 'Menlo')
-   		.attr('font-size', '11px')
-   		.call(yAxis);
-	};
+    // Setting up Axis.
+    yAxis = d3.svg.axis()
+      .scale(yScale)
+      .orient('right')
+      .ticks(5);
+    svg.append('g')
+      .attr('fill', 'none')
+      .attr('stroke', '#000')
+      .attr('shape-rendering', 'crispEdges')
+      .attr('font-family', 'Menlo')
+      .attr('font-size', '11px')
+      .call(yAxis);
+  };
 
-	// Retrieve data using JSON.
-	retrieveData = function () {
-		// Load the data using JSON.
-		$.getJSON('data/newport10k.json', function(json) {
-			var
-				timePerGender,
-				groupByTimeAll;
+  // Retrieve data using JSON.
+  retrieveData = function () {
+    // Load the data using JSON.
+    $.getJSON('data/newport10k.json', function(json) {
+      var
+        timePerGender,
+        groupByTimeAll;
 
-			// Extract only time and gender.
-			timePerGender = _.map(json, function (value, key, list) {
-				var
-					timestr,
-					time;
+      // Extract only time and gender.
+      timePerGender = _.map(json, function (value, key, list) {
+        var
+          timestr,
+          time;
 
-				// Need to add an additional 0 to match millisseconds.
-				timestr = value.Time.replace(/ +/, '') + '0';
+        // Need to add an additional 0 to match millisseconds.
+        timestr = value.Time.replace(/ +/, '') + '0';
 
-				// Add hour if missing.
-				if (timestr.split(':').length === 2) {
-					timestr = '0:' + timestr;
-				}
+        // Add hour if missing.
+        if (timestr.split(':').length === 2) {
+          timestr = '0:' + timestr;
+        }
 
-				// Parse the time.
-				time = moment.duration(timestr, 'HH:mm:ss.SS');
+        // Parse the time.
+        time = moment.duration(timestr, 'HH:mm:ss.SS');
 
-				// Return the time.
-				return {
-					time: time,
-					gender: value.Gender
-				};
-			});
+        // Return the time.
+        return {
+          time: time,
+          gender: value.Gender
+        };
+      });
 
-			// Group by 2 minutes intervals.
-			groupByTimeAll = _.groupBy(timePerGender, function (value, key, list) {
-				return Math.floor(value.time.asMinutes() / 2) * 2;
-			});
-			groupByTimeAll = _.map(groupByTimeAll, function (value, key, list) {
-				var
-					duration,
-					durationStr;
+      // Group by 2 minutes intervals.
+      groupByTimeAll = _.groupBy(timePerGender, function (value, key, list) {
+        return Math.floor(value.time.asMinutes() / 2) * 2;
+      });
+      groupByTimeAll = _.map(groupByTimeAll, function (value, key, list) {
+        var
+          duration,
+          durationStr;
 
-				// Calculate the time.
-				duration = moment.duration(parseInt(key), 'minutes');
-				durationStr = duration.hours() + ':';
+        // Calculate the time.
+        duration = moment.duration(parseInt(key), 'minutes');
+        durationStr = duration.hours() + ':';
 
-				// Add an additional 0 for beautifulness.
-				if (duration.minutes() == 0) {
-					durationStr += '0';
-				}
-				durationStr += duration.minutes();
+        // Add an additional 0 for beautifulness.
+        if (duration.minutes() == 0) {
+          durationStr += '0';
+        }
+        durationStr += duration.minutes();
 
-				return {
-					value: durationStr,
-					count: value.length
-				};
-			});
+        return {
+          value: durationStr,
+          count: value.length
+        };
+      });
 
-			// Call plot.
-			plot(groupByTimeAll, 'svg', 700, 400);
-		});
-	};
-	retrieveData();
+      // Call plot.
+      plot(groupByTimeAll, 'svg', 700, 400);
+    });
+  };
+  retrieveData();
 }());
 
-		</script>
-	</body>
+    </script>
+  </body>
 </html>
